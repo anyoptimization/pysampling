@@ -1,7 +1,10 @@
-from pysample.sample import sample
 import matplotlib.pyplot as plt
 
-X = sample("lhs", 100, 2, criterion="maxmin", optimizer="ga")
+from pysample.sample import sample
+
+X = sample("sobol", 1000, 2, setup="matlab")
+
+print(X)
 
 plt.scatter(X[:, 0], X[:, 1])
 plt.show()

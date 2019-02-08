@@ -12,6 +12,8 @@ def random_search(fun_sample, fun_obj, iterations):
             f = _f
             X = _X
 
+            print(f)
+
     return X
 
 

@@ -6,7 +6,7 @@ import unittest
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 testmodules = [
-    'tests.test_centered_l2_discrepancy',
+    'tests.test_indicator',
     #'tests.test_usage'
 ]
 
