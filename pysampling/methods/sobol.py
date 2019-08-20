@@ -8,13 +8,34 @@ from pysample.util import path_to_resources
 
 class SobolSampling(Sampling):
 
-    def __init__(self, n_skip=-1, n_leap=0, setup="matlab") -> None:
+    def __init__(self, n_skip=None, n_leap=0, setup="matlab") -> None:
         super().__init__()
-        fname = "sobol_%s.dat" % setup
-        self.setup = parse_file(path_to_resources(fname))
 
+        if setup == "matlab":
+            if n_skip is None:
+                n_skip = 0
+            max_bits = 53
+            fname = "sobol_matlab.dat"
+
+        elif setup == "burkardt":
+            if n_skip is None:
+                n_skip = -1
+            max_bits = 32
+            fname = "sobol_burkardt.dat"
+
+        elif setup == "joekuo":
+            if n_skip is None:
+                n_skip = 0
+            max_bits = 32
+            fname = "sobol_joekuo.dat"
+
+        else:
+            raise Exception("Unkonwn setup.")
+
+        self.setup = parse_file(path_to_resources(fname))
         self.n_skip = n_skip
         self.n_leap = n_leap
+        self.max_bits = max_bits
 
     def _sample(self, n_samples, n_dim):
 
@@ -26,7 +47,7 @@ class SobolSampling(Sampling):
             I += self.n_skip
         n_sequence = np.max(I) + 1
 
-        # containts all the values of the sequences as integer
+        # contains all the values of the sequences as integer
         _X = np.zeros((n_sequence, n_dim), dtype=np.int)
 
         # number of bits which will be necessary for this sequence
@@ -38,7 +59,7 @@ class SobolSampling(Sampling):
         for j in range(n_dim):
 
             if j == 0:
-                V = np.concatenate((np.array([0]), 2 ** np.arange(31, -1, -1)))
+                V = np.concatenate((np.array([0]), 2 ** np.arange(self.max_bits-1, -1, -1)))
 
             else:
 
@@ -47,12 +68,12 @@ class SobolSampling(Sampling):
 
                 if L <= s:
                     for k in range(1, L + 1):
-                        V[k] = m[k - 1] << (32 - k)
+                        V[k] = m[k - 1] << (self.max_bits - k)
 
                 else:
 
                     for k in range(1, s + 1):
-                        V[k] = m[k - 1] << (32 - k)
+                        V[k] = m[k - 1] << (self.max_bits - k)
 
                     for i in range(s + 1, L + 1):
                         V[i] = V[i - s] ^ int(V[i - s] >> s)
@@ -62,7 +83,7 @@ class SobolSampling(Sampling):
             for i in range(1, n_sequence):
                 _X[i, j] = _X[i - 1, j] ^ V[C[i - 1]]
 
-        X = (_X / 2 ** 32)[I]
+        X = (_X / 2 ** self.max_bits)[I]
         return X
 
 

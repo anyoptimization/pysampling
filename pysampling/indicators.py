@@ -23,8 +23,9 @@ def centered_l2_discrepancy(X):
     _acmh = np.abs(acmh.T[..., None] + acmh.T[:, None, :])
 
     val = np.sum(np.prod((1 + 0.5 * (_acmh - _X)), axis=0))
-    val = ((13 / 12) ** n_dim - 2 / n_points * np.sum(
-        np.prod(1 + 0.5 * (acmh - acmh ** 2), axis=1)) + val / n_points ** 2) ** 0.5
+
+    val = ((13 / 12) ** n_dim -
+           2 / n_points * np.sum(np.prod(1 + 0.5 * (acmh - acmh ** 2), axis=1)) + val / n_points ** 2) ** 0.5
 
     return val
 
