@@ -6,7 +6,7 @@ The framework is available at the PyPi Repository:
 
 .. code-block:: bash
 
-    pip install pysampling
+    pip install -U pysampling
 
 
 Usage
