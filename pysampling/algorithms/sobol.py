@@ -2,13 +2,17 @@ import numpy as np
 
 import re
 
-from pysample.methods.sampling import Sampling
-from pysample.util import path_to_resources
+from pysampling.sampling import Sampling
+from pysampling.util import path_to_resource
 
 
 class SobolSampling(Sampling):
 
-    def __init__(self, n_skip=None, n_leap=0, setup="matlab") -> None:
+    def __init__(self,
+                 n_skip=None,
+                 n_leap=0,
+                 setup="joekuo"):
+
         super().__init__()
 
         if setup == "matlab":
@@ -30,19 +34,19 @@ class SobolSampling(Sampling):
             fname = "sobol_joekuo.dat"
 
         else:
-            raise Exception("Unkonwn setup.")
+            raise Exception("Unknown setup.")
 
-        self.setup = parse_file(path_to_resources(fname))
+        self.setup = parse_file(path_to_resource(fname))
         self.n_skip = n_skip
         self.n_leap = n_leap
         self.max_bits = max_bits
 
-    def _sample(self, n_samples, n_dim):
+    def _sample(self, n_points, n_dim):
 
         # find out how long the sequence needs to be - skip or leap included
-        I = np.arange(0, n_samples, self.n_leap+1)
+        I = np.arange(0, n_points) * (self.n_leap + 1)
         if self.n_skip == -1:
-            I += n_samples
+            I += n_points
         else:
             I += self.n_skip
         n_sequence = np.max(I) + 1

@@ -6,7 +6,8 @@ import unittest
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 testmodules = [
-    'tests.test_indicator',
+    'tests.test_discrepancy',
+    'tests.test_sobol',
     #'tests.test_usage'
 ]
 

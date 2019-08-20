@@ -1,4 +1,46 @@
 from setuptools import setup, find_packages
+from pysampling.version import __version__
+
+# ---------------------------------------------------------------------------------------------------------
+# GENERAL
+# ---------------------------------------------------------------------------------------------------------
+
+
+__name__ = "pysampling"
+__author__ = "Julian Blank"
+__url__ = "https://www.egr.msu.edu/coinlab/blankjul/pysampling/"
+
+data = dict(
+    name=__name__,
+    version=__version__,
+    author=__author__,
+    url=__url__,
+    python_requires='>=3.6',
+    author_email="blankjul@egr.msu.edu",
+    description="Multi-Objective Optimization in Python",
+    license='Apache License 2.0',
+    keywords="optimization",
+    install_requires=['numpy>=1.15'],
+    platforms='any',
+    classifiers=[
+        'Intended Audience :: Developers',
+        'Intended Audience :: Science/Research',
+        'Operating System :: OS Independent',
+        'License :: OSI Approved :: Apache Software License',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Topic :: Scientific/Engineering',
+        'Topic :: Scientific/Engineering :: Artificial Intelligence',
+        'Topic :: Scientific/Engineering :: Mathematics'
+    ]
+)
+
+
+# ---------------------------------------------------------------------------------------------------------
+# OTHER METADATA
+# ---------------------------------------------------------------------------------------------------------
 
 
 def readme():
@@ -6,23 +48,16 @@ def readme():
         return f.read()
 
 
-__name__ = "pysample"
-__author__ = "Julian Blank"
-__version__ = '0.0.1'
-__url__ = "https://github.com/msu-coinlab/pysample"
+def packages():
+    return ["pysampling"] + ["pysampling." + e for e in find_packages(where='pysampling')]
 
-setup(
-    name=__name__,
-    version=__version__,
-    author=__author__,
-    author_email="blankjul@egr.msu.edu",
-    description="Sampling",
-    long_description=readme(),
-    url=__url__,
-    license='Apache License 2.0',
-    keywords="optimization",
-    install_requires=['numpy', 'autograd'],
-    packages=find_packages(exclude=['tests', 'docs']),
-    include_package_data=True,
-    platforms='any',
-)
+
+data['long_description'] = readme()
+data['packages'] = packages()
+
+
+# ---------------------------------------------------------------------------------------------------------
+# SETUP
+# ---------------------------------------------------------------------------------------------------------
+
+setup(data)
