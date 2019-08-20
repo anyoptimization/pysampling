@@ -37,7 +37,7 @@ The method to be used for sampling using different algorithm must be
 import from pysampling.sample. Here, we use Latin Hypercube Sampling to
 generate 50 points in 2 dimensions.
 
-.. code:: ipython3
+.. code:: python
 
     import matplotlib.pyplot as plt
     from pysampling.sample import sample
@@ -52,12 +52,6 @@ generate 50 points in 2 dimensions.
 Contact
 =======
 
-.. |blankjul| raw:: html
-
-   <a href="http://www.cse.msu.edu/~blankjul/" target="_blank">My personal homepage</a>
-
-
-|blankjul|
 
 Feel free to contact me if you have any question:
 
