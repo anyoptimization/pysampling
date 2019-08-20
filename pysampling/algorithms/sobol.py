@@ -11,9 +11,10 @@ class SobolSampling(Sampling):
     def __init__(self,
                  n_skip=None,
                  n_leap=0,
-                 setup="joekuo"):
+                 setup="joekuo",
+                 **kwargs):
 
-        super().__init__()
+        super().__init__(**kwargs)
 
         if setup == "matlab":
             if n_skip is None:
