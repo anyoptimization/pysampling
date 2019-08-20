@@ -22,6 +22,7 @@ data = dict(
     license='Apache License 2.0',
     keywords="optimization",
     install_requires=['numpy>=1.15'],
+    include_package_data=True,
     platforms='any',
     classifiers=[
         'Intended Audience :: Developers',
