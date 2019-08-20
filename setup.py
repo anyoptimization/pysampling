@@ -1,4 +1,5 @@
-from setuptools import setup, find_packages
+from setuptools import setup
+
 from pysampling.version import __version__
 
 # ---------------------------------------------------------------------------------------------------------
@@ -42,19 +43,13 @@ data = dict(
 # OTHER METADATA
 # ---------------------------------------------------------------------------------------------------------
 
-
 def readme():
     with open('README.rst') as f:
         return f.read()
 
 
-def packages():
-    return ["pysampling"] + ["pysampling." + e for e in find_packages(where='pysampling')]
-
-
 data['long_description'] = readme()
-data['packages'] = packages()
-
+data['packages'] = ['pysampling', 'pysampling.algorithms', 'pysampling.resources']
 
 # ---------------------------------------------------------------------------------------------------------
 # SETUP

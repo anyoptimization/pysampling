@@ -19,13 +19,13 @@
 #
 import os
 import sys
+
 sys.path.insert(0, os.path.abspath('../..'))
 
 from pysampling.version import __version__
 
 # show doc
 autoclass_content = 'both'
-
 
 # -- General configuration ------------------------------------------------
 
@@ -37,11 +37,11 @@ autoclass_content = 'both'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc',
-    'sphinx.ext.todo',
-    'sphinxcontrib.bibtex',
-    'sphinxcontrib.napoleon',
-    'nbsphinx'
-]
+              'sphinx.ext.todo',
+              'sphinxcontrib.bibtex',
+              'sphinxcontrib.napoleon',
+              'nbsphinx'
+              ]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -79,14 +79,13 @@ language = 'en'
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = []
+exclude_patterns = ['**.ipynb_checkpoints']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
-
 
 # -- Options for HTML output ----------------------------------------------
 
@@ -95,15 +94,17 @@ todo_include_todos = True
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#html_theme = 'alabaster'
+# html_theme = 'alabaster'
 html_theme = 'sphinx_rtd_theme'
-
+html_title = "pysampling"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = dict(
+    github_url="https://github.com/julesy89/pysampling"
+)
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -122,12 +123,10 @@ html_sidebars = {
     ]
 }
 
-
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'pysamplingdoc'
-
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -147,7 +146,7 @@ latex_elements = {
     # Latex figure (float) alignment
     #
     # 'figure_align': 'htbp',
-    'extraclassoptions' : 'openany',
+    'extraclassoptions': 'openany',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
@@ -158,7 +157,6 @@ latex_documents = [
      'Julian Blank', 'howto'),
 ]
 
-
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples
@@ -167,7 +165,6 @@ man_pages = [
     (master_doc, 'pysampling', 'pysampling Documentation',
      [author], 1)
 ]
-
 
 # -- Options for Texinfo output -------------------------------------------
 
@@ -179,6 +176,3 @@ texinfo_documents = [
      author, 'pysampling', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-
