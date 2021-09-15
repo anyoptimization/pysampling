@@ -1,15 +1,12 @@
 pysampling
 ====================================================================
 
-You can find the detailed documentation here: https://www.egr.msu.edu/coinlab/blankjul/pysampling/
+You can find the detailed documentation here: https://anyoptimization.com/projects/pysampling
 
 
-|travis| |python| |license|
+|python| |license|
 
 
-.. |travis| image:: https://travis-ci.com/julesy89/pysampling.svg?branch=master
-   :alt: build status
-   :target: https://travis-ci.com/msu-coinlab/pymoo
 
 .. |python| image:: https://img.shields.io/badge/python-3.6-blue.svg
    :alt: python 3.6
