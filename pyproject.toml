@@ -1,0 +1,97 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pysampling"
+description = "Sampling methods for design of experiments in Python (random, LHS, Halton, Sobol)."
+authors = [{ name = "Julian Blank", email = "blankjul@outlook.com" }]
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.10"
+keywords = ["sampling", "design of experiments", "latin hypercube", "sobol", "halton", "optimization"]
+dynamic = ["version"]
+dependencies = [
+    "numpy>=1.23",
+]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+
+[project.optional-dependencies]
+plot = ["matplotlib>=3.5"]
+
+[project.urls]
+Homepage = "https://anyoptimization.com/projects/pysampling"
+Source = "https://github.com/anyoptimization/pysampling"
+
+# Single source of truth for the version: src/pysampling/__init__.py::__version__.
+[tool.hatch.version]
+path = "src/pysampling/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pysampling"]
+
+# PEP 735 dependency group — dev tooling, NOT a shipped extra.
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "pytest-xdist>=3",  # `pyclawd test fast` runs under `-n auto`
+    "ruff>=0.6",
+    "mypy>=1.10",
+]
+# Documentation toolchain — installed into the project env (`pip install -e . --group docs`)
+# and driven by `pyclawd docs build` → `python docs/cli.py`. Kept out of the shipped
+# package (PEP 735 group, not an extra).
+docs = [
+    # Sphinx + rendering
+    "sphinx>=7,<9",
+    "nbsphinx>=0.9,<1.0",
+    "sphinx-book-theme>=1.1,<2.0",
+    "sphinx-copybutton",
+    "numpydoc",
+    # Notebook compile + execute + cache
+    "jupytext",
+    "jupyter-cache",
+    "nbclient",
+    "nbconvert",
+    "nbformat",
+    "ipykernel",
+    # Needed to execute the example notebooks
+    "matplotlib>=3.5",
+]
+
+# --------------------------------------------------------------------------- #
+# Code-quality toolchain (run via `pyclawd lint/format/typecheck/check`).
+# --------------------------------------------------------------------------- #
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "tests"]
+# docs/ is a self-contained builder package with its own pyproject and toolchain.
+extend-exclude = ["docs"]
+
+[tool.ruff.lint]
+# pyflakes (F), pycodestyle (E), isort (I), bugbear (B), pyupgrade (UP),
+# flake8-simplify (SIM), comprehensions (C4).
+select = ["E", "F", "I", "B", "UP", "SIM", "C4"]
+
+[tool.mypy]
+# 3.12 so mypy can parse modern numpy's PEP 695 (`type X = ...`) stubs. The
+# package still runs on 3.10+ (the test matrix covers 3.10–3.13).
+python_version = "3.12"
+files = ["src"]
+ignore_missing_imports = true
+warn_unused_configs = true
+check_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

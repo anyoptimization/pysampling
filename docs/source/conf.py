@@ -1,65 +1,33 @@
-# Config file for the Sphinx documentation builder.
-#
-# This file only contains a selection of the most common options. For a full
-# list see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
+"""Sphinx configuration for the pysampling documentation.
 
-# -- Path setup --------------------------------------------------------------
-
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+Notebooks are executed out-of-band by the docs runner (jupyter-cache); Sphinx
+itself never executes them (``nbsphinx_execute = 'never'``) — it only renders the
+already-hydrated ``.ipynb`` files.
+"""
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../..'))
-from pysampling.version import __version__
 
-# -- Project information -----------------------------------------------------
+sys.path.insert(0, os.path.abspath("../../src"))
 
-project = 'pysampling'
-copyright = '2021, Julian Blank'
-author = 'Julian Blank'
+import pysampling  # noqa: E402
 
-# The full version, including alpha/beta/rc tags
-release = __version__
+project = "pysampling"
+copyright = "2026, Julian Blank"
+author = "Julian Blank"
+release = pysampling.__version__
 
-# -- General configuration ---------------------------------------------------
+extensions = ["nbsphinx"]
 
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = [
-    'nbsphinx'
-]
-
-# Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
-
-# List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-# This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['**.ipynb_checkpoints']
-
-# -- Options for HTML output -------------------------------------------------
-
-
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+exclude_patterns = ["build", "**.ipynb_checkpoints"]
 
 html_theme = "sphinx_book_theme"
 html_logo = "_static/pysampling.png"
 html_title = "pysampling"
+html_static_path = ["_static"]
+html_css_files = ["custom.css"]
 html_copy_source = False
 html_sourcelink_suffix = ""
-html_last_updated_fmt = ""
 
-# -- nbsphinx_allow_errors ---------------------------------------------------
-
-nbsphinx_allow_errors = True
+# Notebooks are pre-executed by the docs runner; Sphinx must never re-execute them.
+nbsphinx_execute = "never"

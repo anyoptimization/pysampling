@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class Sampling:
     """
     The abstract sampling class that builds the frame for each implementation of sampling methods.

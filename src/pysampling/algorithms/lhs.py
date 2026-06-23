@@ -1,29 +1,22 @@
 import numpy as np
 
-from pysampling.measures import minimum_distance, correlation
+from pysampling.measures import correlation, minimum_distance
 from pysampling.sampling import Sampling
 
 
 def sample(n_points, n_dim, smooth=True):
 
     X = np.random.random(size=(n_points, n_dim))
-    val = X.argsort(axis=0) + 1
+    ranks = X.argsort(axis=0) + 1
 
-    if smooth:
-        val = val - np.random.random(val.shape)
-    else:
-        val = val - 0.5
-    val /= n_points
+    val = ranks - np.random.random(ranks.shape) if smooth else ranks - 0.5
+    val = val / n_points
 
     return val
 
 
 class LatinHypercubeSampling(Sampling):
-
-    def __init__(self,
-                 criterion="maxmin",
-                 iterations=1000,
-                 **kwargs):
+    def __init__(self, criterion="maxmin", iterations=1000, **kwargs):
 
         super().__init__(**kwargs)
         self.criterion = criterion
@@ -43,8 +36,7 @@ class LatinHypercubeSampling(Sampling):
         f = self.fun_obj(X)
 
         # for each iteration try to improve it
-        for i in range(self.iterations):
-
+        for _ in range(self.iterations):
             # random
             _X = sample(n_points, n_dim)
             _f = self.fun_obj(_X)
@@ -54,6 +46,3 @@ class LatinHypercubeSampling(Sampling):
                 X, f = _X, _f
 
         return X
-
-
-

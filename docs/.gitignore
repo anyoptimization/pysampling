@@ -1,0 +1,13 @@
+# Rendered HTML + Sphinx doctrees
+build/
+
+# jupyter-cache (executed outputs live ONLY here, never in git)
+.jupyter_cache/
+.virtual_documents/
+
+# Notebooks generated from .md sources by jupytext (sources are the .md files)
+source/**/*.ipynb
+
+# Packaging / bytecode for the docs runner
+*.egg-info/
+__pycache__/
