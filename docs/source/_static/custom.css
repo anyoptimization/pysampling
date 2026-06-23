@@ -1,0 +1,11 @@
+/* Match the larger base font of the original pysampling docs. The current
+   sphinx-book-theme/pydata-sphinx-theme tightened its default type scale; this
+   bumps it back up. We override the theme's own base-font variable (the
+   intended knob) so every rem-derived size scales with it. */
+:root {
+    --pst-font-size-base: 18px;
+}
+
+html {
+    font-size: 18px;
+}

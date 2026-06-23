@@ -19,7 +19,6 @@ def halton_sequence(n, b):
 
 
 class HaltonSampling(Sampling):
-
     def _sample(self, n_points, n_dim):
         bases = calc_primes_until(500)[:n_dim]
         X = np.column_stack([halton_sequence(n_points, b) for b in bases])

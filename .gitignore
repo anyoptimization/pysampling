@@ -77,9 +77,6 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# pyenv
-.python-version
-
 # celery beat schedule file
 celerybeat-schedule
 
@@ -105,5 +102,6 @@ venv.bak/
 # mkdocs documentation
 /site
 
-# mypy
+# mypy / ruff
 .mypy_cache/
+.ruff_cache/
