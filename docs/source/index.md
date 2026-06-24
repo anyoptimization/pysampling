@@ -123,10 +123,7 @@ for name in ["random", "lhs", "halton", "sobol"]:
 
 ## Contact
 
-Feel free to contact me if you have any question:
+Questions, bugs, or feature requests? Please open an issue on
+[GitHub](https://github.com/anyoptimization/pysampling/issues).
 
-```
-Julian Blank (blankjul [at] outlook.com)
-Michigan State University
-Computational Optimization and Innovation Laboratory (COIN)
-```
+Maintained by [Julian Blank](https://julianblank.com).
