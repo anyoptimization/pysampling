@@ -1,6 +1,13 @@
 """pysampling's pyclawd config — drives `pyclawd test/lint/typecheck/docs/...` for this repo."""
 
-from pyclawd import DocsConfig, DoctorConfig, Project, QualityConfig, TestConfig
+from pyclawd import (
+    CoverageConfig,
+    DocsConfig,
+    DoctorConfig,
+    Project,
+    QualityConfig,
+    TestConfig,
+)
 
 project = Project(
     name="pysampling",
@@ -35,6 +42,7 @@ project = Project(
         integration_files=[],
         markers={"default": "not slow", "fast": "not slow", "all": ""},
     ),
+    coverage=CoverageConfig(source=["src/pysampling"]),
     doctor=DoctorConfig(
         core_deps=["numpy"],
         dev_deps=["pytest"],

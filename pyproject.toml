@@ -43,6 +43,7 @@ packages = ["src/pysampling"]
 dev = [
     "pytest>=8",
     "pytest-xdist>=3",  # `pyclawd test fast` runs under `-n auto`
+    "pytest-cov>=5",  # `pyclawd coverage`
     "ruff>=0.6",
     "mypy>=1.10",
 ]
