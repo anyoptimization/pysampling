@@ -111,7 +111,7 @@ show(X)
 ### Riesz s-energy (`'riesz'`)
 
 Riesz sampling places points by minimizing the s-energy
-$\sum_{i<j} 1 / \lVert x_i - x_j \rVert^s$ — the points repel each other, so they
+`sum_{i<j} 1 / ||x_i - x_j||^s` — the points repel each other, so they
 spread out as far apart as possible. It is a **maximin** design: it maximizes the
 minimum distance between points, far more than the other methods. It is *not* a
 low-discrepancy method (and its 1-D projections collapse), so reach for `sobol`
@@ -153,14 +153,12 @@ for ax, periodic in zip(axes, [False, True]):
 plt.show()
 ```
 
-```{note}
-The clamped (`periodic=False`) variant is fine in 2-D, but **degrades as the
-dimension grows**: almost all of a hypercube's volume lies near its boundary, so
-the points collapse onto faces and corners — in 10-D nearly every coordinate ends
-up pinned to 0 or 1. The periodic default (recommended) avoids this and stays an
-even, interior-filling design. Use `periodic=False` only when the edges of the
-box are genuine hard walls.
-```
+> **Note** — The clamped (`periodic=False`) variant is fine in 2-D, but it
+> **degrades as the dimension grows**: almost all of a hypercube's volume lies
+> near its boundary, so the points collapse onto faces and corners — in 10-D
+> nearly every coordinate ends up pinned to 0 or 1. The periodic default
+> (recommended) avoids this and stays an even, interior-filling design. Use
+> `periodic=False` only when the edges of the box are genuine hard walls.
 
 ## Comparing uniformity
 
