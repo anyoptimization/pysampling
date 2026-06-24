@@ -8,6 +8,10 @@ project adheres to [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+- `riesz` sampling — a Riesz s-energy maximin design that spreads points by
+  energy minimization (Adam, plateau-stopped). Distances are measured
+  periodically (on the unit torus) by default to avoid the boundary collapse the
+  clamped `periodic=False` variant shows in higher dimensions.
 - Modern Sphinx documentation under `docs/` with a cached build pipeline
   (`pyclawd docs build`): MyST Markdown sources → executed notebooks
   (jupyter-cache) → Sphinx + nbsphinx HTML. The builder is the standalone

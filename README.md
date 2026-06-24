@@ -17,6 +17,7 @@ Detailed documentation: https://anyoptimization.com/projects/pysampling
 | `lhs`      | Latin Hypercube Sampling |
 | `halton`   | Halton sequence         |
 | `sobol`    | Sobol sequence          |
+| `riesz`    | Riesz s-energy (maximin) |
 
 ## Installation
 

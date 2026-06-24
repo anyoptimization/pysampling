@@ -54,6 +54,7 @@ So far our library provides the following implementations:
 - Latin Hypercube Sampling (`'lhs'`)
 - Sobol (`'sobol'`)
 - Halton (`'halton'`)
+- Riesz s-energy (`'riesz'`)
 
 The initialization of each of those will be shown in the following. Let us first
 define a method that helps us to visualize them in a 2d space.
@@ -105,6 +106,60 @@ show(X)
 ```{code-cell} ipython3
 X = sample("halton", 100, 2)
 show(X)
+```
+
+### Riesz s-energy (`'riesz'`)
+
+Riesz sampling places points by minimizing the s-energy
+$\sum_{i<j} 1 / \lVert x_i - x_j \rVert^s$ — the points repel each other, so they
+spread out as far apart as possible. It is a **maximin** design: it maximizes the
+minimum distance between points, far more than the other methods. It is *not* a
+low-discrepancy method (and its 1-D projections collapse), so reach for `sobol`
+or `lhs` when uniformity or projection quality matter, and for `riesz` when you
+want maximally well-separated points.
+
+```{code-cell} ipython3
+X = sample("riesz", 100, 2, seed=1)
+show(X)
+```
+
+By default the energy is measured **periodically** — distances wrap around the
+unit cube (opposite faces are glued together, as on a torus), so there is no
+boundary for points to pile up against. Passing `periodic=False` instead uses
+ordinary Euclidean distance and clamps points into the box, which pushes them
+onto the boundary:
+
+```{code-cell} ipython3
+import numpy as np
+import matplotlib.pyplot as plt
+
+from pysampling.util import cdist
+
+
+def min_dist(Y):
+    D = cdist(Y, Y)
+    np.fill_diagonal(D, np.inf)
+    return D.min()
+
+
+fig, axes = plt.subplots(1, 2, figsize=(10, 5))
+for ax, periodic in zip(axes, [False, True]):
+    Y = sample("riesz", 100, 2, seed=1, periodic=periodic)
+    ax.scatter(Y[:, 0], Y[:, 1], s=25, facecolors="none", edgecolors="r")
+    ax.set_title(f"periodic={periodic}  (min-dist={min_dist(Y):.3f})")
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.set_aspect("equal")
+plt.show()
+```
+
+```{note}
+The clamped (`periodic=False`) variant is fine in 2-D, but **degrades as the
+dimension grows**: almost all of a hypercube's volume lies near its boundary, so
+the points collapse onto faces and corners — in 10-D nearly every coordinate ends
+up pinned to 0 or 1. The periodic default (recommended) avoids this and stays an
+even, interior-filling design. Use `periodic=False` only when the edges of the
+box are genuine hard walls.
 ```
 
 ## Comparing uniformity
