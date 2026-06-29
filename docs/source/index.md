@@ -43,28 +43,8 @@ NumPy `Generator` (e.g. `np.random.default_rng(1)`). It draws from a local
 generator and never touches NumPy's global RNG, so it is safe to call inside a
 larger stochastic pipeline.
 
-Then, we recommend using matplotlib or other visualization libraries to have a
-look at the results:
-
-```{code-cell} ipython3
-import matplotlib.pyplot as plt
-
-plt.scatter(X[:, 0], X[:, 1], s=30, facecolors="none", edgecolors="r")
-plt.show()
-```
-
-## Features
-
-So far our library provides the following implementations:
-
-- Random (`'random'`)
-- Latin Hypercube Sampling (`'lhs'`)
-- Sobol (`'sobol'`)
-- Halton (`'halton'`)
-- Riesz s-energy (`'riesz'`)
-
-The initialization of each of those will be shown in the following. Let us first
-define a method that helps us to visualize them in a 2d space.
+To look at the results we use a small helper that draws the points in the unit
+square — reused for every method below so the plots are directly comparable:
 
 ```{code-cell} ipython3
 import matplotlib.pyplot as plt
@@ -77,7 +57,23 @@ def show(X):
     plt.ylim(0, 1)
     plt.gca().set_aspect("equal")
     plt.show()
+
+
+show(X)
 ```
+
+## Features
+
+So far our library provides the following implementations:
+
+- Random (`'random'`)
+- Latin Hypercube Sampling (`'lhs'`)
+- Sobol (`'sobol'`)
+- Halton (`'halton'`)
+- Riesz s-energy (`'riesz'`)
+
+The initialization of each is shown below, visualized with the `show` helper
+defined above.
 
 ### Random (`'random'`)
 
