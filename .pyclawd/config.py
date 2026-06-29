@@ -4,6 +4,7 @@ from pyclawd import (
     CoverageConfig,
     DocsConfig,
     DoctorConfig,
+    GoldenConfig,
     Project,
     QualityConfig,
     TestConfig,
@@ -40,8 +41,20 @@ project = Project(
         tests_dir="tests/",
         classname_prefix="tests.",
         integration_files=[],
-        markers={"default": "not slow", "fast": "not slow", "all": ""},
+        # `golden` is its own behavior-regression gate (`pyclawd golden`), kept
+        # out of the unit tiers so `pyclawd check` answers "is the logic correct?"
+        # not "did a number move?". CI's bare `pytest` (no -m filter) still runs
+        # golden, with the plugin comparing baselines.
+        markers={
+            "default": "not slow and not golden",
+            "fast": "not slow and not golden",
+            "all": "not golden",
+        },
     ),
+    # Behavior baselines (tests/golden/) compared by the golden pytest plugin.
+    # Loose-ish tolerance absorbs cross-numpy BLAS reassociation in the iterative
+    # riesz design while still catching any real regression (those move >= 1e-2).
+    golden=GoldenConfig(rtol=1e-6, atol=1e-9),
     coverage=CoverageConfig(source=["src/pysampling"]),
     doctor=DoctorConfig(
         core_deps=["numpy"],

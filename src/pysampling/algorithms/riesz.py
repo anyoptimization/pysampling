@@ -56,7 +56,7 @@ class RieszEnergySampling(Sampling):
 
     Optimization is Adam gradient descent with normalized gradients, stopped once
     the energy plateaus (``patience``). It is iterative and stochastic, so pass a
-    ``seed`` for reproducibility. ``s`` defaults to ``n_dim``; larger ``s`` makes
+    ``random_state`` for reproducibility. ``s`` defaults to ``n_dim``; larger ``s`` makes
     the repulsion more local.
     """
 
@@ -68,10 +68,10 @@ class RieszEnergySampling(Sampling):
         self.alpha = alpha
         self.patience = patience
 
-    def _sample(self, n_points, n_dim):
+    def _sample(self, n_points, n_dim, rng):
         s = self.s if self.s is not None else n_dim
 
-        X = np.random.random((n_points, n_dim))
+        X = rng.random((n_points, n_dim))
         best, best_energy, stalled = X.copy(), np.inf, 0
 
         # Adam state for a stable gradient descent without external deps.

@@ -14,7 +14,9 @@ kernelspec:
 ![python](https://img.shields.io/badge/python-3.10+-blue.svg)
 ![license](https://img.shields.io/badge/license-apache-orange.svg)
 
-<https://github.com/anyoptimization/pysampling>
+Generate well-spread point sets in the unit hypercube `[0, 1]^d` — random, Latin
+Hypercube, Halton, Sobol, and Riesz s-energy — with discrepancy measures to assess
+their uniformity.
 
 ## Installation
 
@@ -35,6 +37,11 @@ from pysampling.sample import sample
 
 X = sample("lhs", 50, 2)
 ```
+
+Every method is reproducible via `random_state`, which accepts an `int` seed or a
+NumPy `Generator` (e.g. `np.random.default_rng(1)`). It draws from a local
+generator and never touches NumPy's global RNG, so it is safe to call inside a
+larger stochastic pipeline.
 
 Then, we recommend using matplotlib or other visualization libraries to have a
 look at the results:
@@ -75,15 +82,44 @@ def show(X):
 ### Random (`'random'`)
 
 ```{code-cell} ipython3
-X = sample("random", 50, 2, seed=1)
+X = sample("random", 50, 2, random_state=1)
 show(X)
 ```
 
 ### Latin Hypercube Sampling (`'lhs'`)
 
+By default `lhs` is optimized for spacing: it runs `n_iter` sweeps of
+Morris–Mitchell within-column swap search (maximin), which keeps improving with
+`n_iter` and typically beats Sobol on both spacing and discrepancy:
+
 ```{code-cell} ipython3
-X = sample("lhs", 50, 2, seed=1)
+X = sample("lhs", 50, 2, random_state=1)
 show(X)
+```
+
+Raise `n_iter` for tighter spacing, or pass `criterion=None` for a single raw
+draw (fastest — already low-discrepancy, just not distance-optimized).
+
+#### Keeping distance from existing points (`Xp`)
+
+`Xp` is an existing `(m, n_dim)` point set that the new sample should stay *away*
+from: under the maximin criterion the minimized spacing then spans both the new
+points and their distance to `Xp`. This makes `lhs` an augmented / sequential
+design — adding infill points that avoid an existing set, e.g. earlier
+experiments or evaluations:
+
+```{code-cell} ipython3
+Xp = sample("lhs", 20, 2, random_state=0)        # an existing design
+X = sample("lhs", 20, 2, Xp=Xp, random_state=1)  # new points avoiding Xp
+
+plt.figure(figsize=(5, 5))
+plt.scatter(Xp[:, 0], Xp[:, 1], s=40, c="0.6", label="existing (Xp)")
+plt.scatter(X[:, 0], X[:, 1], s=40, facecolors="none", edgecolors="r", label="new")
+plt.legend(loc="upper right")
+plt.xlim(0, 1)
+plt.ylim(0, 1)
+plt.gca().set_aspect("equal")
+plt.show()
 ```
 
 ### Sobol (`'sobol'`)
@@ -119,7 +155,7 @@ or `lhs` when uniformity or projection quality matter, and for `riesz` when you
 want maximally well-separated points.
 
 ```{code-cell} ipython3
-X = sample("riesz", 100, 2, seed=1)
+X = sample("riesz", 100, 2, random_state=1)
 show(X)
 ```
 
@@ -144,7 +180,7 @@ def min_dist(Y):
 
 fig, axes = plt.subplots(1, 2, figsize=(10, 5))
 for ax, periodic in zip(axes, [False, True]):
-    Y = sample("riesz", 100, 2, seed=1, periodic=periodic)
+    Y = sample("riesz", 100, 2, random_state=1, periodic=periodic)
     ax.scatter(Y[:, 0], Y[:, 1], s=25, facecolors="none", edgecolors="r")
     ax.set_title(f"periodic={periodic}  (min-dist={min_dist(Y):.3f})")
     ax.set_xlim(0, 1)
@@ -160,18 +196,23 @@ plt.show()
 > (recommended) avoids this and stays an even, interior-filling design. Use
 > `periodic=False` only when the edges of the box are genuine hard walls.
 
-## Comparing uniformity
+## Comparing the methods
 
-A more uniform spread has a lower discrepancy. We can quantify it with the
-measures in `pysampling.measures` — here the centered L2 discrepancy of 100
-points in 2D for each algorithm (lower is better):
+The `pysampling.measures` module quantifies two complementary qualities of a
+design: **discrepancy** (how *uniformly* the points fill the space — lower is
+better) and **minimum distance** (how well *separated* they are — higher is
+better). These pull in different directions: low-discrepancy sequences
+(`sobol`, `halton`) win on uniformity, while maximin designs (`riesz`, and `lhs`
+with its default `criterion="maxmin"`) win on separation.
 
 ```{code-cell} ipython3
-from pysampling.measures import centered_l2_discrepancy
+from pysampling.measures import centered_l2_discrepancy, minimum_distance
 
-for name in ["random", "lhs", "halton", "sobol"]:
-    Y = sample(name, 100, 2, seed=1)
-    print(f"{name:8s} {centered_l2_discrepancy(Y):.5f}")
+print(f"{'method':8s} {'discrepancy ↓':>14} {'min-dist ↑':>12}")
+for name in ["random", "lhs", "halton", "sobol", "riesz"]:
+    Y = sample(name, 100, 2, random_state=1)
+    # minimum_distance returns the negated min distance, so flip the sign
+    print(f"{name:8s} {centered_l2_discrepancy(Y):>14.5f} {-minimum_distance(Y):>12.5f}")
 ```
 
 ## Contact

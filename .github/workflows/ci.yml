@@ -7,8 +7,10 @@ on:
 
 # These jobs mirror `pyclawd check` (format-check -> lint -> typecheck -> test):
 # the same tools (ruff check, ruff format --check, mypy, pytest) run here and
-# locally, so a green `pyclawd check` predicts a green CI. CI deliberately does
-# NOT depend on pyclawd being installed/published — it calls the tools directly.
+# locally, so a green `pyclawd check` predicts a green CI. The lint/typecheck jobs
+# call the tools directly and do NOT depend on pyclawd. The test job installs
+# pyclawd so its golden pytest plugin activates and compares the behavior
+# baselines in tests/golden/ (bare pytest runs every marker, including golden).
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -43,7 +45,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - run: python -m pip install --upgrade pip pytest
+      - run: python -m pip install --upgrade pip pytest pyclawd
       - run: python -m pip install -e .
-      - name: Pytest
+      - name: Pytest (incl. golden behavior baselines)
         run: pytest

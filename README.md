@@ -71,7 +71,10 @@ pyclawd docs serve              # serve docs/build/html locally
 
 ## Contact
 
-Julian Blank — blankjul@outlook.com
+Questions, bugs, or feature requests? Please open an issue on
+[GitHub](https://github.com/anyoptimization/pysampling/issues).
+
+Maintained by [Julian Blank](https://julianblank.com).
 
 ## License
 

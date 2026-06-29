@@ -1,11 +1,18 @@
-/* Match the larger base font of the original pysampling docs. The current
-   sphinx-book-theme/pydata-sphinx-theme tightened its default type scale; this
-   bumps it back up. We override the theme's own base-font variable (the
-   intended knob) so every rem-derived size scales with it. */
-:root {
-    --pst-font-size-base: 18px;
+/* Match the pymoo documentation typography. pymoo styles the article body with
+   PT Sans at 15px / weight 300; it references the font without importing it, so
+   we pull PT Sans from Google Fonts here so it actually renders as intended. */
+@import url("https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap");
+
+.bd-article-container {
+    font-family: "PT Sans", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.5em;
+    letter-spacing: 0.2px;
 }
 
-html {
-    font-size: 18px;
+@media (max-width: 768px) {
+    .bd-article-container {
+        font-size: 14px;
+    }
 }

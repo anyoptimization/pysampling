@@ -1,0 +1,15 @@
+{% extends "!layout.html" %}
+{# Minimal head additions: SEO + social-share meta tags (the theme has none). #}
+{% block extrahead %}
+  {{ super() }}
+  <meta name="description" content="Generate well-spread point sets in the unit hypercube [0,1]^d — random, Latin Hypercube, Halton, Sobol, and Riesz s-energy — with discrepancy measures to assess their uniformity.">
+  <meta name="keywords" content="sampling, Latin Hypercube, LHS, Sobol, Halton, Riesz, low-discrepancy, quasi-Monte Carlo, design of experiments, space-filling, Python">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="pysampling">
+  <meta property="og:description" content="Well-spread point sets in the unit hypercube (random, Latin Hypercube, Halton, Sobol, Riesz) plus discrepancy measures, in Python.">
+  <meta property="og:url" content="https://anyoptimization.com/projects/pysampling/">
+  <meta property="og:image" content="https://anyoptimization.com/projects/pysampling/_static/pysampling.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="pysampling">
+  <meta name="twitter:description" content="Well-spread point sets in the unit hypercube (random, Latin Hypercube, Halton, Sobol, Riesz) plus discrepancy measures, in Python.">
+{% endblock %}

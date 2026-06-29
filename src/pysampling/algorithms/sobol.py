@@ -1,4 +1,5 @@
 import re
+from functools import cache
 
 import numpy as np
 
@@ -37,7 +38,7 @@ class SobolSampling(Sampling):
         self.n_leap = n_leap
         self.max_bits = max_bits
 
-    def _sample(self, n_points, n_dim):
+    def _sample(self, n_points, n_dim, rng):
 
         # find out how long the sequence needs to be - skip or leap included
         idx = np.arange(0, n_points) * (self.n_leap + 1)
@@ -77,8 +78,11 @@ class SobolSampling(Sampling):
                         for k in range(1, s):
                             V[i] ^= ((a >> (s - 1 - k)) & 1) * V[i - k]
 
-            for i in range(1, n_sequence):
-                _X[i, j] = _X[i - 1, j] ^ V[C[i - 1]]
+            # _X[i, j] = _X[i-1, j] ^ V[C[i-1]] is a cumulative XOR down the
+            # column (starting from _X[0, j] = 0), so XOR-accumulate the per-step
+            # generators in one vectorized pass instead of a Python loop.
+            if n_sequence > 1:
+                _X[1:, j] = np.bitwise_xor.accumulate(V[C[: n_sequence - 1]])
 
         X = (_X / 2**self.max_bits)[idx]
         return X
@@ -92,7 +96,10 @@ def highest_bit(i):
     return bit
 
 
+@cache
 def parse_file(path_to_file):
+    # The direction-number tables are static package data, so parsing the same
+    # file is memoized -- otherwise every SobolSampling() re-reads ~1000 rows.
     setup: list[dict] = [{}]
 
     with open(path_to_file) as f:

@@ -1,0 +1,44 @@
+# pysampling
+
+> Generate well-spread point sets in the unit hypercube [0,1]^d (random, Latin
+> Hypercube, Halton, Sobol, Riesz s-energy) and assess their uniformity with
+> discrepancy and distance measures. Python, NumPy-based.
+
+pysampling exposes a single entry point, `sample(algorithm, n_points, n_dim, ...)`,
+which returns an `(n_points, n_dim)` NumPy array of points in `[0, 1]^n_dim`.
+Reproducibility is via `random_state` (an int seed or a `numpy.random.Generator`);
+it draws from a local generator and never mutates NumPy's global RNG.
+
+## Usage
+
+```python
+from pysampling.sample import sample
+
+X = sample("sobol", 100, 2)              # 100 points in 2-D, deterministic
+X = sample("lhs", 50, 3, random_state=1) # reproducible Latin Hypercube draw
+```
+
+## Algorithms
+
+- `random` — uniform random sampling.
+- `lhs` — Latin Hypercube Sampling. Default `criterion="maxmin"` runs `n_iter`
+  sweeps of Morris-Mitchell within-column swap optimization (best-spaced; beats
+  Sobol on spacing and discrepancy). `criterion=None` gives a single fast draw;
+  `criterion="correlation"` minimizes column correlation; `Xp=<(m,n_dim) array>`
+  keeps the new points away from an existing set (augmented / sequential design).
+- `halton` — Halton low-discrepancy sequence.
+- `sobol` — Sobol low-discrepancy sequence (`n_skip`, `n_leap`, `setup` options).
+- `riesz` — Riesz s-energy design (maximin; `periodic=True` by default).
+
+## Measures (`pysampling.measures`)
+
+- `centered_l2_discrepancy`, `l2_discrepancy`, `l2_star_discrepancy`,
+  `modified_l2_discrepancy`, `symmetric_l2_discrepancy`, `wrap_around_l2_discrepancy`
+  — discrepancy criteria (lower = more uniform).
+- `minimum_distance`, `correlation` — spacing / column-correlation criteria.
+
+## Links
+
+- Documentation: https://anyoptimization.com/projects/pysampling
+- Source: https://github.com/anyoptimization/pysampling
+- Install: `pip install -U pysampling`
